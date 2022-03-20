@@ -1,16 +1,13 @@
 package migrations
 
 import (
-	"goer/app/models"
-	"goer/pkg/migrate"
+	"github.com/goer-project/goer/migrate"
 
 	"gorm.io/gorm"
 )
 
 type {{StructName}} struct {
-	models.BaseModel
 
-	models.TimestampsField
 }
 
 func ({{StructName}}) TableName() string {

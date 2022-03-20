@@ -1,4 +1,4 @@
-package migration
+package migrate
 
 import (
 	"gorm.io/gorm"
@@ -6,13 +6,13 @@ import (
 
 type migrationFunc func(gorm.Migrator)
 
+var migrationFiles []MigrationFile
+
 type MigrationFile struct {
 	Up       migrationFunc
 	Down     migrationFunc
 	FileName string
 }
-
-var migrationFiles []MigrationFile
 
 func Add(name string, up migrationFunc, down migrationFunc) {
 	migrationFiles = append(migrationFiles, MigrationFile{
@@ -22,7 +22,7 @@ func Add(name string, up migrationFunc, down migrationFunc) {
 	})
 }
 
-func GetMigrationFile(name string) MigrationFile {
+func getMigrationFile(name string) MigrationFile {
 	for _, migrationFile := range migrationFiles {
 		if name == migrationFile.FileName {
 			return migrationFile
@@ -30,4 +30,14 @@ func GetMigrationFile(name string) MigrationFile {
 	}
 
 	return MigrationFile{}
+}
+
+func (migrationFile MigrationFile) isNotMigrated(migrations []Migration) bool {
+	for _, migration := range migrations {
+		if migration.Migration == migrationFile.FileName {
+			return false
+		}
+	}
+
+	return true
 }

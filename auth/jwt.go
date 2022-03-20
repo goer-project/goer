@@ -17,9 +17,9 @@ var (
 )
 
 type JWT struct {
-	jwtSecret []byte
-	jwtTtl    int64
-	guard     string
+	JwtSecret []byte
+	JwtTtl    int64
+	Guard     string
 }
 
 type CustomClaims struct {
@@ -37,9 +37,9 @@ func (j *JWT) CreateToken(id uint64) (JwtToken, error) {
 	// Create the claims
 	claims := CustomClaims{
 		id,
-		j.guard,
+		j.Guard,
 		jwt.StandardClaims{
-			ExpiresAt: time.Now().Unix() + j.jwtTtl,
+			ExpiresAt: time.Now().Unix() + j.JwtTtl,
 		},
 	}
 
@@ -48,7 +48,7 @@ func (j *JWT) CreateToken(id uint64) (JwtToken, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	// Sign and get the complete encoded token as a string using the secret
-	tokenString, err := token.SignedString(j.jwtSecret)
+	tokenString, err := token.SignedString(j.JwtSecret)
 
 	jt := JwtToken{
 		AccessToken: tokenString,
@@ -64,7 +64,7 @@ func (j JWT) ParseToken(c *gin.Context) (*CustomClaims, error) {
 
 	// Parse token
 	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return j.jwtSecret, nil
+		return j.JwtSecret, nil
 	})
 	if err != nil {
 		if ve, ok := err.(*jwt.ValidationError); ok {

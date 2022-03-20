@@ -22,7 +22,7 @@ func Add(name string, up migrationFunc, down migrationFunc) {
 	})
 }
 
-func getMigrationFile(name string) MigrationFile {
+func GetMigrationFile(name string) MigrationFile {
 	for _, migrationFile := range migrationFiles {
 		if name == migrationFile.FileName {
 			return migrationFile

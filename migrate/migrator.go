@@ -56,7 +56,7 @@ func (migrator *Migrator) Up() {
 
 	ran := false
 	for _, migrationFile := range migrateFiles {
-		if migrationFile.isNotMigrated(migrations) {
+		if isNotMigrated(migrations, migrationFile) {
 			migrator.runUpMigration(migrationFile, batch)
 			ran = true
 		}
@@ -85,7 +85,7 @@ func (migrator *Migrator) rollbackMigrations(migrations []Migration) bool {
 	for _, _migration := range migrations {
 		fmt.Printf("%s %s\n", ansi.Color("Rolling back:", "yellow"), _migration.Migration)
 
-		migrationFile := getMigrationFile(_migration.Migration)
+		migrationFile := GetMigrationFile(_migration.Migration)
 		if migrationFile.Down != nil {
 			migrationFile.Down(migrator.DB.Migrator())
 		}
@@ -122,7 +122,7 @@ func (migrator *Migrator) readAllMigrationFiles() []MigrationFile {
 		// Get filename
 		fileName := file.GetFileNameWithoutExtension(f.Name())
 
-		migrationFile := getMigrationFile(fileName)
+		migrationFile := GetMigrationFile(fileName)
 
 		if len(migrationFile.FileName) > 0 {
 			migrateFiles = append(migrateFiles, migrationFile)
@@ -173,4 +173,14 @@ func (migrator *Migrator) Fresh() {
 	console.Info("Migration table created successfully.")
 
 	migrator.Up()
+}
+
+func isNotMigrated(migrations []Migration, migrationFile MigrationFile) bool {
+	for _, migration := range migrations {
+		if migration.Migration == migrationFile.FileName {
+			return false
+		}
+	}
+
+	return true
 }

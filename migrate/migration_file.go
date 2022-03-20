@@ -22,7 +22,7 @@ func Add(name string, up migrationFunc, down migrationFunc) {
 	})
 }
 
-func getMigrationFile(name string) MigrationFile {
+func GetMigrationFile(name string) MigrationFile {
 	for _, migrationFile := range migrationFiles {
 		if name == migrationFile.FileName {
 			return migrationFile
@@ -30,14 +30,4 @@ func getMigrationFile(name string) MigrationFile {
 	}
 
 	return MigrationFile{}
-}
-
-func (migrationFile MigrationFile) isNotMigrated(migrations []Migration) bool {
-	for _, migration := range migrations {
-		if migration.Migration == migrationFile.FileName {
-			return false
-		}
-	}
-
-	return true
 }

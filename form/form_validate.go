@@ -1,7 +1,12 @@
 package form
 
 import (
+	"encoding/json"
+	"errors"
+
+	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/goer-project/goer/response"
 	"github.com/iancoleman/strcase"
 )
 
@@ -42,4 +47,20 @@ func ParseErrors(request FormRequest, err error) map[string][]string {
 	}
 
 	return data
+}
+
+func Validate(c *gin.Context, request FormRequest) bool {
+	if err := c.ShouldBind(request); err != nil {
+		// Unmarshal error
+		if _, ok := err.(*json.UnmarshalTypeError); ok {
+			response.BadRequest(c, errors.New("illegal parameter"))
+			return false
+		}
+
+		// Validation error
+		response.ValidationError(c, ParseErrors(request, err))
+		return false
+	}
+
+	return true
 }

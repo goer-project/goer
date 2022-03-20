@@ -3,7 +3,6 @@ package migrate
 import (
 	goerConfig "github.com/goer-project/goer-core/config"
 	"github.com/goer-project/goer/config"
-	"github.com/goer-project/goer/database"
 	"github.com/goer-project/goer/migrate"
 	"github.com/spf13/cobra"
 )
@@ -36,5 +35,4 @@ func migrator() *migrate.Migrator {
 func initConfig() {
 	CmdMigrate.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is ./config.toml)")
 	goerConfig.InitConfig(cfgFile, &config.NewConfig) // Init viper
-	database.DB = database.Gorm()
 }

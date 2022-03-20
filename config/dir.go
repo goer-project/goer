@@ -7,6 +7,7 @@ type Dir struct {
 	Migration  string `mapstructure:"migration" json:"migration" yaml:"migration"`
 	Model      string `mapstructure:"model" json:"model" yaml:"model"`
 	Request    string `mapstructure:"request" json:"request" yaml:"request"`
+	Upload     string `mapstructure:"upload" json:"upload" yaml:"upload"`
 }
 
 var NewDir = Dir{
@@ -16,4 +17,5 @@ var NewDir = Dir{
 	Migration:  "database/migrations",
 	Model:      "app/models",
 	Request:    "app/http/requests",
+	Upload:     "storage/public",
 }

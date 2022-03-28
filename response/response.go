@@ -79,6 +79,13 @@ func Unauthorized(c *gin.Context, msg ...string) {
 	})
 }
 
+// NotFound 404
+func NotFound(c *gin.Context) {
+	c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
+		"message": http.StatusText(http.StatusNotFound),
+	})
+}
+
 // ValidationError 422
 func ValidationError(c *gin.Context, errors map[string][]string) {
 	c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{

@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cast"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 type Pagination struct {
@@ -37,8 +36,7 @@ func Paginate(c *gin.Context, db *gorm.DB, data interface{}, perPage int) Pagina
 	}
 	p.initProperties(perPage)
 
-	err := p.query.Preload(clause.Associations).
-		Order(p.Sort + " " + p.Order).
+	err := p.query.Order(p.Sort + " " + p.Order).
 		Limit(p.PerPage).
 		Offset(p.Offset).
 		Find(data).

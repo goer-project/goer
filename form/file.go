@@ -25,6 +25,10 @@ func SaveUploadedFile(c *gin.Context, file *multipart.FileHeader) (string, error
 		return "", err
 	}
 
+	if !IsResizable(c, file) {
+		return path, nil
+	}
+
 	// Open image
 	resizedPath, err := filePkg.Resize(dir, fileName, file)
 	if err != nil {
@@ -32,4 +36,27 @@ func SaveUploadedFile(c *gin.Context, file *multipart.FileHeader) (string, error
 	}
 
 	return resizedPath, nil
+}
+
+func IsResizable(c *gin.Context, header *multipart.FileHeader) bool {
+	fileContent, err := header.Open()
+
+	mime, err := filePkg.GetContentType(fileContent)
+	if err != nil {
+		return false
+	}
+
+	resizableTypes := []string{
+		"image/jpg",
+		"image/jpeg",
+		"image/png",
+	}
+
+	for _, resizableType := range resizableTypes {
+		if resizableType == mime {
+			return true
+		}
+	}
+
+	return false
 }

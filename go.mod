@@ -6,7 +6,7 @@ require (
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/goer-project/goer-core v0.1.1
-	github.com/goer-project/goer-utils v0.6.0
+	github.com/goer-project/goer-utils v0.6.2
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/iancoleman/strcase v0.2.0
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d

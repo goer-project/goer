@@ -18,9 +18,9 @@ func Save(c *gin.Context, file *multipart.FileHeader) (dir string, filename stri
 	_ = os.MkdirAll(storagePath+dirName, 0755)
 
 	// Random filename
-	fileName := filePkg.RandomFilename(file)
+	filename = filePkg.RandomFilename(file)
 	dir = storagePath + dirName
-	path := dir + fileName
+	path := dir + filename
 	if err := c.SaveUploadedFile(file, path); err != nil {
 		return "", "", err
 	}
